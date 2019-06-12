@@ -5,14 +5,13 @@ const fs = require('fs')
 
 module.exports = {
   async index (req, res) {
-    const posts = await Post.find().sort('-createAt')
+    const posts = await Post.find().sort('-createdAt')
 
     return res.json(posts)
   },
 
   async store (req, res) {
     const { author, place, description, hashtags } = req.body
-    console.log({ author, place, description, hashtags })
     const { filename: image } = req.file
 
     const [name] = image.split('.')
@@ -32,6 +31,8 @@ module.exports = {
       hashtags,
       image: filename
     })
+
+    console.log(req.io)
 
     req.io.emit('post', post)
 
